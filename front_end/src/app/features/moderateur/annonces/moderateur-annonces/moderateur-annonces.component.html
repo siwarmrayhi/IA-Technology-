@@ -1,0 +1,42 @@
+<div class="mod-content">
+  <div class="content-header">
+    <button mat-button routerLink="/moderateur/dashboard">
+      <mat-icon>arrow_back</mat-icon> Retour
+    </button>
+    <h1><mat-icon>campaign</mat-icon> Annonces</h1>
+  </div>
+
+  <mat-card class="form-card">
+    <h2>Nouvelle annonce</h2>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre</mat-label>
+      <input matInput [(ngModel)]="titre" placeholder="Titre de l'annonce" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contenu</mat-label>
+      <textarea matInput [(ngModel)]="contenu" rows="4"
+                placeholder="Contenu de l'annonce..."></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="ajouter()">
+      <mat-icon>campaign</mat-icon> Diffuser
+    </button>
+  </mat-card>
+
+  <div class="items-list">
+    <mat-card class="item-card" *ngFor="let a of annonces">
+      <div class="item-head">
+        <h3>{{ a.titre }}</h3>
+        <button mat-icon-button color="warn" (click)="supprimer(a)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <span class="item-date">{{ a.date | date:'dd/MM/yyyy HH:mm' }}</span>
+      <p>{{ a.contenu }}</p>
+    </mat-card>
+
+    <div class="empty" *ngIf="annonces.length === 0">
+      <mat-icon>inbox</mat-icon>
+      <p>Aucune annonce diffusée pour le moment.</p>
+    </div>
+  </div>
+</div>

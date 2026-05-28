@@ -1,0 +1,44 @@
+<div class="mod-content">
+  <div class="content-header">
+    <button mat-button (click)="null" routerLink="/moderateur/dashboard">
+      <mat-icon>arrow_back</mat-icon> Retour
+    </button>
+    <h1><mat-icon>newspaper</mat-icon> Actualités</h1>
+  </div>
+
+  <!-- Formulaire de publication -->
+  <mat-card class="form-card">
+    <h2>Nouvelle actualité</h2>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre</mat-label>
+      <input matInput [(ngModel)]="titre" placeholder="Titre de l'actualité" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contenu</mat-label>
+      <textarea matInput [(ngModel)]="contenu" rows="4"
+                placeholder="Contenu de l'actualité..."></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="ajouter()">
+      <mat-icon>publish</mat-icon> Publier
+    </button>
+  </mat-card>
+
+  <!-- Liste -->
+  <div class="items-list">
+    <mat-card class="item-card" *ngFor="let a of actualites">
+      <div class="item-head">
+        <h3>{{ a.titre }}</h3>
+        <button mat-icon-button color="warn" (click)="supprimer(a)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <span class="item-date">{{ a.date | date:'dd/MM/yyyy HH:mm' }}</span>
+      <p>{{ a.contenu }}</p>
+    </mat-card>
+
+    <div class="empty" *ngIf="actualites.length === 0">
+      <mat-icon>inbox</mat-icon>
+      <p>Aucune actualité publiée pour le moment.</p>
+    </div>
+  </div>
+</div>

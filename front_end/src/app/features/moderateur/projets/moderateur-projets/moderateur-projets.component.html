@@ -1,0 +1,54 @@
+<div class="mod-content">
+  <div class="content-header">
+    <button mat-button routerLink="/moderateur/dashboard">
+      <mat-icon>arrow_back</mat-icon> Retour
+    </button>
+    <h1><mat-icon>featured_play_list</mat-icon> Projets en avant</h1>
+    <p class="subtitle">
+      Activez les publications à mettre en avant sur la page d'accueil.
+    </p>
+  </div>
+
+  <div class="loading-center" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <div class="actions-bar" *ngIf="publications.length > 0">
+      <span class="count">{{ enAvant.size }} sur {{ publications.length }} publication(s) en avant</span>
+      <button mat-raised-button color="primary" (click)="enregistrer()">
+        <mat-icon>save</mat-icon> Enregistrer la sélection
+      </button>
+    </div>
+
+    <div class="items-list">
+      <mat-card class="item-card" *ngFor="let p of publications"
+                [class.highlighted]="isEnAvant(p)">
+        <div class="item-row">
+          <div class="item-info">
+            <h3>{{ p.titre }}</h3>
+            <p *ngIf="p.description">
+              {{ p.description | slice:0:160 }}{{ p.description!.length > 160 ? '...' : '' }}
+            </p>
+            <span class="item-meta" *ngIf="p.datePublication">
+              <mat-icon>event</mat-icon> {{ p.datePublication | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+          <mat-slide-toggle
+              [checked]="isEnAvant(p)"
+              (change)="toggle(p)"
+              color="primary">
+            En avant
+          </mat-slide-toggle>
+        </div>
+      </mat-card>
+
+      <div class="empty" *ngIf="publications.length === 0">
+        <mat-icon>inbox</mat-icon>
+        <p>Aucune publication disponible.</p>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

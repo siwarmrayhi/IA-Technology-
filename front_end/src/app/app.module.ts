@@ -6,16 +6,26 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { ModerateurActualitesComponent } from './features/moderateur/actualites/moderateur-actualites/moderateur-actualites.component';
+import { ModerateurAnnoncesComponent } from './features/moderateur/annonces/moderateur-annonces/moderateur-annonces.component';
+import { ModerateurProjetsComponent } from './features/moderateur/projets/moderateur-projets/moderateur-projets.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
+
+
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+        ModerateurActualitesComponent,
+    ModerateurAnnoncesComponent,
+        ModerateurProjetsComponent
   ],
   providers: [
     {
