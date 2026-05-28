@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ isEdit ? 'edit' : 'person_add' }}</mat-icon>
+  {{ isEdit ? 'Modifier le compte' : 'Créer un compte' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" style="padding: 8px 0; display: flex; flex-direction: column; gap: 16px; min-width: 400px;">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nom d'utilisateur *</mat-label>
+      <input matInput formControlName="username" />
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="form.get('username')?.hasError('required')">Champ obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email *</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-icon matPrefix>email</mat-icon>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">Email invalide</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ isEdit ? 'Nouveau mot de passe (laisser vide)' : 'Mot de passe *' }}</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+      <mat-icon matPrefix>lock</mat-icon>
+      <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 6 caractères</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Rôle *</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let r of roles" [value]="r.value">
+          {{ r.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>admin_panel_settings</mat-icon>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="form.invalid || loading">
+    <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+    <span *ngIf="!loading">{{ isEdit ? 'Enregistrer' : 'Créer' }}</span>
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,47 @@
+<mat-toolbar class="navbar" color="primary">
+  <a routerLink="/" class="brand">
+    <mat-icon>science</mat-icon>
+    <span>IA-Technology</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      Accueil
+    </a>
+    <a mat-button routerLink="/recherche" routerLinkActive="active">
+      Recherche
+    </a>
+  </nav>
+
+  <!-- Non connecté -->
+  <div *ngIf="!authService.isLoggedIn()">
+    <a mat-button routerLink="/login">Connexion</a>
+    <a mat-raised-button color="accent" routerLink="/register">S'inscrire</a>
+  </div>
+
+  <!-- Connecté -->
+  <div *ngIf="authService.isLoggedIn()" class="user-menu">
+    <button mat-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+      {{ authService.getCurrentUsername() }}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/espace-utilisateur/profil">
+        <mat-icon>person</mat-icon> Mon profil
+      </button>
+      <button mat-menu-item routerLink="/admin/dashboard" *ngIf="isAdmin">
+        <mat-icon>admin_panel_settings</mat-icon> Espace Admin
+      </button>
+      <button mat-menu-item routerLink="/moderateur/dashboard" *ngIf="isModerator && !isAdmin">
+        <mat-icon>edit_note</mat-icon> Espace Modérateur
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Déconnexion
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

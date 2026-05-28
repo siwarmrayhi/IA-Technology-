@@ -1,0 +1,101 @@
+.admin-container {
+  height: 100vh;
+}
+
+.admin-sidenav {
+  width: 260px;
+  background: #1e1b4b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+
+  .sidenav-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    .brand-icon {
+      font-size: 2rem;
+      width: 48px;
+      height: 48px;
+      background: rgba(99, 102, 241, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h3 { font-size: 1rem; font-weight: 700; }
+
+    .role-badge {
+      font-size: 0.7rem;
+      background: rgba(99, 102, 241, 0.4);
+      padding: 2px 8px;
+      border-radius: 20px;
+      color: #a5b4fc;
+    }
+  }
+
+  mat-nav-list {
+    flex: 1;
+    padding-top: 8px;
+
+    a {
+      color: rgba(255,255,255,0.7) !important;
+      border-radius: 8px;
+      margin: 2px 8px;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+      }
+
+      &.active {
+        background: rgba(99, 102, 241, 0.4) !important;
+        color: #c7d2fe !important;
+        font-weight: 600;
+      }
+
+      mat-icon { color: inherit; }
+    }
+  }
+
+  .sidenav-footer {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+
+    .logout-btn {
+      width: 100%;
+      color: rgba(255,255,255,0.6);
+
+      &:hover { color: white; }
+    }
+  }
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  .topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+}
+
+.admin-main {
+  padding: 24px;
+  background: var(--bg);
+  min-height: calc(100vh - 56px);
+}

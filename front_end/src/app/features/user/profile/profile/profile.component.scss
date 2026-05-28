@@ -1,0 +1,144 @@
+.profile-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.profile-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 64px);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  gap: 24px;
+}
+
+.profile-sidebar {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  height: fit-content;
+  box-shadow: var(--shadow);
+
+  .avatar-section {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+
+    .avatar {
+      margin: 0 auto 12px;
+
+      mat-icon {
+        font-size: 5rem;
+        width: 5rem;
+        height: 5rem;
+        color: var(--primary);
+      }
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .roles {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+  }
+
+  .sidebar-nav {
+    .logout-item {
+      color: #dc2626 !important;
+      cursor: pointer;
+    }
+  }
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .content-header {
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.5rem;
+      font-weight: 700;
+
+      mat-icon { color: var(--primary); }
+    }
+    p { color: var(--text-muted); margin-top: 4px; }
+  }
+}
+
+.profile-card, .info-card {
+  mat-card-content {
+    padding: 20px !important;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  .span-2 { grid-column: 1 / -1; }
+}
+
+.form-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+
+    &:last-child { border-bottom: none; }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .info-value {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
+}

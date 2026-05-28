@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ isEdit ? 'edit' : 'add_circle' }}</mat-icon>
+  {{ isEdit ? 'Modifier la publication' : 'Ajouter une publication' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre *</mat-label>
+      <input matInput formControlName="titre" />
+      <mat-error>Champ obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>DOI (lien optionnel)</mat-label>
+      <input matInput formControlName="doi" placeholder="https://doi.org/..." />
+      <mat-icon matSuffix>link</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date de publication</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="datePublication" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Upload PDF -->
+    <div class="upload-section">
+      <label>Document PDF</label>
+      <div class="upload-area">
+        <input type="file" accept=".pdf" (change)="onFileSelected($event)" #fileInput style="display:none" />
+        <button mat-stroked-button type="button" (click)="fileInput.click()">
+          <mat-icon>upload_file</mat-icon>
+          {{ form.get('fichier')?.value ? form.get('fichier')?.value : 'Choisir un fichier PDF' }}
+        </button>
+        <mat-spinner diameter="20" *ngIf="uploading"></mat-spinner>
+      </div>
+    </div>
+
+    <!-- Chercheurs associés -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Chercheurs associés *</mat-label>
+      <mat-select formControlName="chercheurs" multiple [compareWith]="compareChercheurs">
+        <mat-option *ngFor="let c of chercheurs" [value]="c">
+          {{ c.prenom }} {{ c.nom }} ({{ c.domaine?.nom || 'sans domaine' }})
+        </mat-option>
+      </mat-select>
+      <mat-error>Sélectionnez au moins un chercheur</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || loading || uploading">
+    <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+    <span *ngIf="!loading">{{ isEdit ? 'Enregistrer' : 'Ajouter' }}</span>
+  </button>
+</mat-dialog-actions>

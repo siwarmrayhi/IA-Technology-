@@ -1,0 +1,152 @@
+<div class="profile-page">
+
+  <!-- Navbar -->
+  <mat-toolbar color="primary" class="navbar">
+    <a routerLink="/" class="brand">
+      <mat-icon>science</mat-icon>
+      <span>IA-Technology</span>
+    </a>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/">Accueil</a>
+    <a mat-button routerLink="/recherche">Recherche</a>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Déconnexion
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div class="profile-container">
+
+    <!-- Sidebar profil -->
+    <div class="profile-sidebar">
+      <div class="avatar-section">
+        <div class="avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <h2>{{ currentUser?.username || '...' }}</h2>
+        <p>{{ currentUser?.email || '' }}</p>
+        <div class="roles">
+          <mat-chip *ngFor="let role of currentUser?.roles"
+            [color]="role.name === 'ADMIN' ? 'warn' : role.name === 'MODERATOR' ? 'accent' : 'primary'"
+            highlighted>
+            {{ role.name }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <mat-nav-list class="sidebar-nav">
+        <a mat-list-item routerLink="/recherche">
+          <mat-icon matListItemIcon>search</mat-icon>
+          <span matListItemTitle>Rechercher</span>
+        </a>
+        <a mat-list-item routerLink="/">
+          <mat-icon matListItemIcon>home</mat-icon>
+          <span matListItemTitle>Accueil</span>
+        </a>
+        <a mat-list-item (click)="logout()" class="logout-item">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>Déconnexion</span>
+        </a>
+      </mat-nav-list>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="profile-content">
+
+      <div class="content-header">
+        <h1><mat-icon>person</mat-icon> Mon Profil</h1>
+        <p>Gérez vos informations personnelles</p>
+      </div>
+
+      <div *ngIf="loading" class="loading-center">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-card *ngIf="!loading" class="profile-card">
+        <mat-card-header>
+          <mat-card-title>Informations personnelles</mat-card-title>
+          <mat-card-subtitle>Modifiez vos données de compte</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="span-2">
+                <mat-label>Nom d'utilisateur</mat-label>
+                <input matInput formControlName="username" />
+                <mat-icon matPrefix>person</mat-icon>
+                <mat-error>Champ obligatoire</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="span-2">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" />
+                <mat-icon matPrefix>email</mat-icon>
+                <mat-error>Email invalide</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="span-2">
+                <mat-label>Nouveau mot de passe (laisser vide pour ne pas changer)</mat-label>
+                <input matInput
+                  [type]="hidePassword ? 'password' : 'text'"
+                  formControlName="password"
+                  placeholder="Nouveau mot de passe" />
+                <mat-icon matPrefix>lock</mat-icon>
+                <button type="button" mat-icon-button matSuffix
+                  (click)="hidePassword = !hidePassword">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="profileForm.invalid || saving">
+                <mat-spinner diameter="18" *ngIf="saving"></mat-spinner>
+                <mat-icon *ngIf="!saving">save</mat-icon>
+                <span>{{ saving ? 'Enregistrement...' : 'Enregistrer les modifications' }}</span>
+              </button>
+            </div>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Infos du compte -->
+      <mat-card *ngIf="!loading && currentUser" class="info-card">
+        <mat-card-header>
+          <mat-card-title>Informations du compte</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">ID Compte</span>
+              <span class="info-value">#{{ currentUser.id }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Rôles</span>
+              <span class="info-value">
+                <mat-chip-set>
+                  <mat-chip *ngFor="let r of currentUser.roles">{{ r.name }}</mat-chip>
+                </mat-chip-set>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Membre depuis</span>
+              <span class="info-value">{{ currentUser.created_at | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+</div>

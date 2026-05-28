@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ isEdit ? 'edit' : 'person_add' }}</mat-icon>
+  {{ isEdit ? 'Modifier le chercheur' : 'Ajouter un chercheur' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Nom *</mat-label>
+      <input matInput formControlName="nom" />
+      <mat-error *ngIf="form.get('nom')?.hasError('required')">Champ obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Prénom *</mat-label>
+      <input matInput formControlName="prenom" />
+      <mat-error *ngIf="form.get('prenom')?.hasError('required')">Champ obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Email *</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-icon matSuffix>email</mat-icon>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">Email invalide</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Affiliation *</mat-label>
+      <input matInput formControlName="affiliation" placeholder="Université, laboratoire..." />
+      <mat-error *ngIf="form.get('affiliation')?.hasError('required')">Champ obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Domaine de recherche</mat-label>
+      <mat-select formControlName="domaine">
+        <mat-option [value]="null">— Aucun domaine —</mat-option>
+        <mat-option *ngFor="let d of domaines" [value]="d">{{ d.nom }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || loading">
+    <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+    <span *ngIf="!loading">{{ isEdit ? 'Enregistrer' : 'Ajouter' }}</span>
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,104 @@
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <mat-icon>science</mat-icon>
+      IA-Technology Research Platform
+    </div>
+    <h1>Découvrez les travaux de recherche en <span class="highlight">Intelligence Artificielle</span></h1>
+    <p>Plateforme centralisée pour la gestion et la diffusion des publications scientifiques en NLP, Vision par ordinateur, Cybersécurité et autres domaines émergents.</p>
+    <div class="hero-actions">
+      <button mat-raised-button color="primary" size="large" (click)="navigateToRecherche()">
+        <mat-icon>search</mat-icon> Explorer les publications
+      </button>
+      <button mat-stroked-button routerLink="/login" *ngIf="!isLoggedIn">
+        <mat-icon>login</mat-icon> Se connecter
+      </button>
+      <button mat-stroked-button routerLink="/espace-utilisateur/profil" *ngIf="isLoggedIn">
+        <mat-icon>dashboard</mat-icon> Mon espace
+      </button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="floating-card">
+      <mat-icon>psychology</mat-icon>
+      <span>NLP</span>
+    </div>
+    <div class="floating-card">
+      <mat-icon>visibility</mat-icon>
+      <span>Vision IA</span>
+    </div>
+    <div class="floating-card">
+      <mat-icon>security</mat-icon>
+      <span>Cybersécurité</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATISTIQUES -->
+<section class="stats-section">
+  <div class="stats-container">
+    <div class="stat-item">
+      <span class="stat-number">{{ stats.chercheurs }}</span>
+      <span class="stat-label">Chercheurs</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number">{{ stats.publications }}</span>
+      <span class="stat-label">Publications</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number">{{ stats.domaines }}</span>
+      <span class="stat-label">Domaines</span>
+    </div>
+  </div>
+</section>
+
+<!-- DOMAINES DE RECHERCHE -->
+<section class="domains-section">
+  <div class="section-header">
+    <h2>Domaines de recherche</h2>
+    <p>Explorez nos axes de recherche en Intelligence Artificielle</p>
+  </div>
+  <div class="domains-grid">
+    <mat-card class="domain-card" *ngFor="let d of domaines" (click)="router.navigate(['/recherche'], {queryParams: {domaineId: d.id}})">
+      <mat-card-content>
+        <mat-icon class="domain-icon">science</mat-icon>
+        <h3>{{ d.nom }}</h3>
+        <p>{{ d.description || 'Cliquez pour explorer les chercheurs de ce domaine' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
+
+<!-- PUBLICATIONS RÉCENTES -->
+<section class="publications-section">
+  <div class="section-header">
+    <h2>Publications récentes</h2>
+    <a routerLink="/recherche" mat-button color="primary">Voir toutes <mat-icon>arrow_forward</mat-icon></a>
+  </div>
+  <div class="publications-grid">
+    <mat-card class="publication-card" *ngFor="let pub of publications">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>article</mat-icon>
+        <mat-card-title>{{ pub.titre }}</mat-card-title>
+        <mat-card-subtitle>{{ pub.datePublication | date:'MMMM yyyy' }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ pub.description | slice:0:150 }}{{ pub.description?.length > 150 ? '...' : '' }}</p>
+        <mat-chip-set>
+          <mat-chip *ngFor="let c of pub.chercheurs">{{ c.prenom }} {{ c.nom }}</mat-chip>
+        </mat-chip-set>
+      </mat-card-content>
+<mat-card-actions>
+  <a mat-button color="primary" *ngIf="pub.doi" [href]="pub.doi" target="_blank">
+    <mat-icon>link</mat-icon> DOI
+  </a>
+  <button mat-button color="accent" *ngIf="pub.fichier" (click)="downloadPub(pub.fichier)">
+    <mat-icon>download</mat-icon> PDF
+  </button>
+</mat-card-actions>
+    </mat-card>
+  </div>
+</section>

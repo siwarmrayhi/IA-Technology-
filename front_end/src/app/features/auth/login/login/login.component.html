@@ -1,0 +1,80 @@
+<div class="auth-page">
+  <div class="auth-left">
+    <div class="brand">
+      <div class="logo-icon">
+        <mat-icon>science</mat-icon>
+      </div>
+      <h1>IA-Technology</h1>
+      <p>Plateforme de gestion des travaux scientifiques et publications de recherche</p>
+    </div>
+    <div class="features-list">
+      <div class="feature-item">
+        <mat-icon>groups</mat-icon>
+        <span>Gestion des chercheurs</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>article</mat-icon>
+        <span>Publications scientifiques</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>category</mat-icon>
+        <span>Domaines de recherche</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>security</mat-icon>
+        <span>Accès sécurisé</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-card">
+      <h2>Connexion</h2>
+      <p class="subtitle">Accédez à votre espace de travail</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom d'utilisateur</mat-label>
+          <input matInput formControlName="username" placeholder="Entrez votre username" />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Le nom d'utilisateur est obligatoire
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Le mot de passe est obligatoire
+          </mat-error>
+        </mat-form-field>
+
+        <div class="error-alert" *ngIf="errorMessage">
+          <mat-icon>error_outline</mat-icon>
+          {{ errorMessage }}
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="loading">
+          <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+          <span *ngIf="!loading">Se connecter</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <span>Pas encore de compte ?</span>
+        <a routerLink="/register">S'inscrire</a>
+      </div>
+
+      <div class="back-home">
+        <a routerLink="/">
+          <mat-icon>arrow_back</mat-icon> Retour à l'accueil
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
