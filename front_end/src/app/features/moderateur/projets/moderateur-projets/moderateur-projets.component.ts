@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Publication } from '../../../../core/models/publication.model';
 import { PublicationService } from '../../../../core/services/publication.service';
 
-;
+
 
 @Component({
   selector: 'app-moderateur-projets',
@@ -26,8 +26,6 @@ import { PublicationService } from '../../../../core/services/publication.servic
 })
 export class ModerateurProjetsComponent implements OnInit {
   publications: Publication[] = [];
-  // IDs des publications mises en avant (persistence locale en attendant l'endpoint backend)
-  enAvant: Set<number> = new Set<number>();
   loading = true;
 
   constructor(
@@ -36,38 +34,29 @@ export class ModerateurProjetsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Restaure la sélection précédente
-    const saved = localStorage.getItem('projetsEnAvant');
-    if (saved) {
-      try { this.enAvant = new Set(JSON.parse(saved)); } catch {}
-    }
-
     this.pubService.getAll().subscribe({
-      next: (data : any) => { this.publications = data; this.loading = false; },
+      next: (data:any) => { this.publications = data; this.loading = false; },
       error: () => { this.loading = false; }
     });
   }
 
   toggle(p: Publication) {
     if (!p.id) return;
-    if (this.enAvant.has(p.id)) {
-      this.enAvant.delete(p.id);
-    } else {
-      this.enAvant.add(p.id);
-    }
-    localStorage.setItem('projetsEnAvant', JSON.stringify(Array.from(this.enAvant)));
+    const newVal = !p.enAvant;
+    this.pubService.setFeatured(p.id, newVal).subscribe({
+      next: (updated:any) => {
+        p.enAvant = updated.enAvant;
+        this.snackBar.open(
+          newVal ? 'Publication mise en avant' : 'Publication retirée',
+          'OK',
+          { duration: 2000 }
+        );
+      },
+      error: () => this.snackBar.open('Erreur', 'OK', { duration: 2500 })
+    });
   }
 
-  isEnAvant(p: Publication): boolean {
-    return !!p.id && this.enAvant.has(p.id);
-  }
-
-  enregistrer() {
-    localStorage.setItem('projetsEnAvant', JSON.stringify(Array.from(this.enAvant)));
-    this.snackBar.open(
-      `${this.enAvant.size} projet(s) mis en avant`,
-      'OK',
-      { duration: 2500 }
-    );
+  get countEnAvant(): number {
+    return this.publications.filter(p => p.enAvant).length;
   }
 }

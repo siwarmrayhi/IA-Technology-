@@ -16,15 +16,14 @@
   <ng-container *ngIf="!loading">
 
     <div class="actions-bar" *ngIf="publications.length > 0">
-      <span class="count">{{ enAvant.size }} sur {{ publications.length }} publication(s) en avant</span>
-      <button mat-raised-button color="primary" (click)="enregistrer()">
-        <mat-icon>save</mat-icon> Enregistrer la sélection
-      </button>
+      <span class="count">
+        {{ countEnAvant }} sur {{ publications.length }} publication(s) en avant
+      </span>
     </div>
 
     <div class="items-list">
       <mat-card class="item-card" *ngFor="let p of publications"
-                [class.highlighted]="isEnAvant(p)">
+                [class.highlighted]="p.enAvant">
         <div class="item-row">
           <div class="item-info">
             <h3>{{ p.titre }}</h3>
@@ -36,7 +35,7 @@
             </span>
           </div>
           <mat-slide-toggle
-              [checked]="isEnAvant(p)"
+              [checked]="!!p.enAvant"
               (change)="toggle(p)"
               color="primary">
             En avant
@@ -52,3 +51,4 @@
 
   </ng-container>
 </div>
+

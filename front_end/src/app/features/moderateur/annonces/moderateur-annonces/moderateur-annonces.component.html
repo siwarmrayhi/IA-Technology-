@@ -17,12 +17,18 @@
       <textarea matInput [(ngModel)]="contenu" rows="4"
                 placeholder="Contenu de l'annonce..."></textarea>
     </mat-form-field>
-    <button mat-raised-button color="accent" (click)="ajouter()">
-      <mat-icon>campaign</mat-icon> Diffuser
+    <button mat-raised-button color="accent"
+            (click)="ajouter()" [disabled]="saving">
+      <mat-icon>campaign</mat-icon>
+      {{ saving ? 'Diffusion...' : 'Diffuser' }}
     </button>
   </mat-card>
 
-  <div class="items-list">
+  <div class="loading-center" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div class="items-list" *ngIf="!loading">
     <mat-card class="item-card" *ngFor="let a of annonces">
       <div class="item-head">
         <h3>{{ a.titre }}</h3>
@@ -30,7 +36,9 @@
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <span class="item-date">{{ a.date | date:'dd/MM/yyyy HH:mm' }}</span>
+      <span class="item-date" *ngIf="a.date">
+        {{ a.date | date:'dd/MM/yyyy HH:mm' }}
+      </span>
       <p>{{ a.contenu }}</p>
     </mat-card>
 
@@ -40,3 +48,4 @@
     </div>
   </div>
 </div>
+

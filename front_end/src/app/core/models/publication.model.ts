@@ -8,4 +8,5 @@ export interface Publication {
   fichier?: string;
   datePublication?: string;
   chercheurs?: Chercheur[];
+  enAvant?: boolean;  // <-- AJOUT
 }

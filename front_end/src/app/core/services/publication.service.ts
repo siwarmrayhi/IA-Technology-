@@ -64,5 +64,18 @@ export class PublicationService {
       ))
     );
   }
+    // Liste des publications mises en avant (utilisée par la page home)
+  getFeatured(): Observable<Publication[]> {
+    return this.http.get<Publication[]>(`${this.apiUrl}/featured`);
+  }
+
+  // Active ou désactive le marquage "en avant" d'une publication
+  setFeatured(id: number, value: boolean): Observable<Publication> {
+    return this.http.patch<Publication>(
+      `${this.apiUrl}/${id}/featured?value=${value}`,
+      {}
+    );
+  }
+
 
 }

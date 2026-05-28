@@ -4,6 +4,10 @@ import { PublicationService } from '../../../../core/services/publication.servic
 import { DomaineService } from '../../../../core/services/domaine.service';
 import { ChercheurService } from '../../../../core/services/chercheur.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ActualiteService } from '../../../../core/services/actualite.service';
+import { AnnonceService } from '../../../../core/services/annonce.service';
+import { Actualite } from '../../../../core/models/actualite.model';
+import { Annonce } from '../../../../core/models/annonce.model';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +16,10 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class HomeComponent implements OnInit {
   publications: any[] = [];
+  publicationsFeatured: any[] = [];
   domaines: any[] = [];
+  actualites: Actualite[] = [];
+  annonces: Annonce[] = [];
   stats = { chercheurs: 0, publications: 0, domaines: 0 };
   isLoggedIn = false;
 
@@ -21,7 +28,9 @@ export class HomeComponent implements OnInit {
     private pubService: PublicationService,
     private domaineService: DomaineService,
     private chercheurService: ChercheurService,
-    public authService: AuthService
+    public authService: AuthService,
+    private actualiteService: ActualiteService,
+    private annonceService: AnnonceService
   ) {}
 
   ngOnInit() {
@@ -32,6 +41,12 @@ export class HomeComponent implements OnInit {
       this.stats.publications = p.length;
     });
 
+    // Projets mis en avant par le modérateur
+    this.pubService.getFeatured().subscribe({
+      next: data => this.publicationsFeatured = data,
+      error: () => {} // pas critique si vide
+    });
+
     this.domaineService.getAll().subscribe(d => {
       this.domaines = d;
       this.stats.domaines = d.length;
@@ -39,6 +54,16 @@ export class HomeComponent implements OnInit {
 
     this.chercheurService.getAll().subscribe(c => {
       this.stats.chercheurs = c.length;
+    });
+
+    // Actualités et annonces publiées par le modérateur
+    this.actualiteService.getAll().subscribe({
+      next: data => this.actualites = data.slice(0, 3),
+      error: () => {}
+    });
+    this.annonceService.getAll().subscribe({
+      next: data => this.annonces = data.slice(0, 3),
+      error: () => {}
     });
   }
 
@@ -48,5 +73,9 @@ export class HomeComponent implements OnInit {
 
   downloadPub(filename: string) {
     window.open(`http://localhost:8082/uploads/${filename}`, '_blank');
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

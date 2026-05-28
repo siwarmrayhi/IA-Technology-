@@ -59,4 +59,20 @@ public class PublicationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    // GET : liste des publications mises en avant (pour la page d'accueil)
+    @GetMapping("/featured")
+    public List<Publications> getFeatured() {
+        return service.getAll().stream()
+                .filter(p -> Boolean.TRUE.equals(p.getEnAvant()))
+                .toList();
+    }
+
+    // PATCH : activer/désactiver le marquage "en avant"
+    @PatchMapping("/{id}/featured")
+    public Publications setFeatured(@PathVariable Long id, @RequestParam boolean value) {
+        Publications p = service.getById(id);
+        if (p == null) return null;
+        p.setEnAvant(value);
+        return service.save(p);
+    }
 }

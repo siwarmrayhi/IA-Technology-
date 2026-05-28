@@ -54,7 +54,73 @@
     </div>
   </div>
 </section>
+<!-- BANDEAU D'ANNONCES (uniquement si le modérateur a diffusé des annonces) -->
+<section class="home-annonces" *ngIf="annonces.length > 0">
+  <div class="container">
+    <h2><mat-icon>campaign</mat-icon> Annonces</h2>
+    <div class="annonce-card" *ngFor="let a of annonces">
+      <div class="annonce-head">
+        <mat-icon>info</mat-icon>
+        <strong>{{ a.titre }}</strong>
+        <span class="annonce-date" *ngIf="a.date">{{ a.date | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <p>{{ a.contenu }}</p>
+    </div>
+  </div>
+</section>
 
+<!-- ACTUALITÉS -->
+<section class="home-actualites" *ngIf="actualites.length > 0">
+  <div class="container">
+    <h2><mat-icon>newspaper</mat-icon> Dernières actualités</h2>
+    <div class="actualites-grid">
+      <mat-card class="actualite-card" *ngFor="let a of actualites">
+        <mat-card-header>
+          <div mat-card-avatar class="act-avatar"><mat-icon>article</mat-icon></div>
+          <mat-card-title>{{ a.titre }}</mat-card-title>
+          <mat-card-subtitle *ngIf="a.date">
+            {{ a.date | date:'dd MMMM yyyy' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ a.contenu | slice:0:200 }}{{ a.contenu.length > 200 ? '...' : '' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETS EN AVANT (publications marquées par le modérateur) -->
+<section class="home-featured" *ngIf="publicationsFeatured.length > 0">
+  <div class="container">
+    <h2><mat-icon>star</mat-icon> Projets en avant</h2>
+    <div class="featured-grid">
+      <mat-card class="featured-card" *ngFor="let pub of publicationsFeatured">
+        <mat-card-header>
+          <div mat-card-avatar class="featured-avatar"><mat-icon>workspace_premium</mat-icon></div>
+          <mat-card-title>{{ pub.titre }}</mat-card-title>
+          <mat-card-subtitle>{{ pub.datePublication | date:'MMMM yyyy' }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="pub.description">
+            {{ pub.description | slice:0:140 }}{{ pub.description.length > 140 ? '...' : '' }}
+          </p>
+          <mat-chip-set *ngIf="pub.chercheurs?.length">
+            <mat-chip *ngFor="let c of pub.chercheurs">{{ c.prenom }} {{ c.nom }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-button color="primary" *ngIf="pub.doi" [href]="pub.doi" target="_blank">
+            <mat-icon>link</mat-icon> DOI
+          </a>
+          <button mat-button color="accent" *ngIf="pub.fichier" (click)="downloadPub(pub.fichier)">
+            <mat-icon>download</mat-icon> PDF
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</section>
 <!-- DOMAINES DE RECHERCHE -->
 <section class="domains-section">
   <div class="section-header">

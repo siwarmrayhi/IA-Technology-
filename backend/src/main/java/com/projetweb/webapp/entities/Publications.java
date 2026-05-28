@@ -12,7 +12,7 @@ public class Publications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Boolean enAvant = false;
     private String titre;
     private String description;
     private String doi; // lien DOI optionnel
@@ -84,4 +84,12 @@ public class Publications {
     public void setChercheurs(List<Chercheur> chercheurs) {
         this.chercheurs = chercheurs;
     }
+    public Boolean getEnAvant() {
+        return enAvant != null && enAvant;
+    }
+
+    public void setEnAvant(Boolean enAvant) {
+        this.enAvant = enAvant;
+    }
+
 }
