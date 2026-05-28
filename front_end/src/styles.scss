@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@import '@angular/cdk/overlay-prebuilt.css';
 
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
@@ -754,11 +755,20 @@ mat-dialog-content {
     }
   }
 }
-// Dialog overlay — minimal override, CDK handles centering natively
-// The overlay container is moved to <body> in app.component.ts,
-// so these rules only ensure correct z-index and border-radius.
 .cdk-overlay-container {
-  z-index: 1000 !important;
+  z-index: 1100;
+}
+
+// Coins arrondis du dialog (purement cosmétique)
+.mat-mdc-dialog-container {
+  border-radius: 12px !important;
+}
+
+.cdk-global-overlay-wrapper .cdk-overlay-pane {
+  pointer-events: auto;
+  position: static !important; // empêche un positionnement absolu résiduel
+  margin: auto;
+  max-width: 90vw;
 }
 
 .mat-mdc-dialog-container {

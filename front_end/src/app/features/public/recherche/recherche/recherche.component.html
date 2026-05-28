@@ -1,1 +1,109 @@
-<p>recherche works!</p>
+<!-- ============================================================
+     REMPLACE tout le contenu de :
+     src/app/features/public/recherche/recherche/recherche.component.html
+     ============================================================ -->
+
+<app-navbar></app-navbar>
+
+<div class="recherche-page">
+
+  <!-- En-tête -->
+  <header class="recherche-header">
+    <h1><mat-icon>search</mat-icon> Recherche</h1>
+    <p>Trouvez des chercheurs par nom, par domaine ou par mots-clés.</p>
+  </header>
+
+  <!-- Barre de recherche -->
+  <mat-card class="search-box">
+    <div class="search-types">
+      <button mat-stroked-button
+              [class.active]="searchType === 'nom'"
+              (click)="searchType = 'nom'; clearSearch()">
+        <mat-icon>person</mat-icon> Par nom
+      </button>
+      <button mat-stroked-button
+              [class.active]="searchType === 'domaine'"
+              (click)="searchType = 'domaine'; clearSearch()">
+        <mat-icon>category</mat-icon> Par domaine
+      </button>
+      <button mat-stroked-button
+              [class.active]="searchType === 'mots-cles'"
+              (click)="searchType = 'mots-cles'; clearSearch()">
+        <mat-icon>label</mat-icon> Par mots-clés
+      </button>
+    </div>
+
+    <div class="search-inputs">
+      <!-- Champ texte : nom ou mots-clés -->
+      <mat-form-field appearance="outline" class="search-field"
+                      *ngIf="searchType === 'nom' || searchType === 'mots-cles'">
+        <mat-label>{{ searchType === 'nom' ? 'Nom du chercheur' : 'Mot-clé' }}</mat-label>
+        <input matInput [(ngModel)]="searchQuery"
+               (keyup.enter)="search()"
+               placeholder="Saisissez votre recherche..." />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Sélection de domaine -->
+      <mat-form-field appearance="outline" class="search-field"
+                      *ngIf="searchType === 'domaine'">
+        <mat-label>Domaine</mat-label>
+        <mat-select [(ngModel)]="selectedDomaineId">
+          <mat-option *ngFor="let d of domaines" [value]="d.id">{{ d.nom }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="search-btn" (click)="search()">
+        <mat-icon>search</mat-icon> Rechercher
+      </button>
+      <button mat-button *ngIf="searched" (click)="clearSearch()">
+        <mat-icon>close</mat-icon> Effacer
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Chargement -->
+  <div class="loading-center" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Résultats -->
+  <div class="results" *ngIf="!loading && searched">
+
+    <p class="results-count" *ngIf="chercheurs.length > 0">
+      {{ chercheurs.length }} chercheur(s) trouvé(s)
+    </p>
+
+    <div class="results-grid">
+      <mat-card class="chercheur-card" *ngFor="let c of chercheurs">
+        <mat-card-header>
+          <div mat-card-avatar class="chercheur-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <mat-card-title>{{ c.prenom }} {{ c.nom }}</mat-card-title>
+          <mat-card-subtitle *ngIf="c.affiliation">{{ c.affiliation }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="c.email"><mat-icon>email</mat-icon> {{ c.email }}</p>
+          <mat-chip-set *ngIf="c.domaine">
+            <mat-chip>{{ c.domaine.nom }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Aucun résultat -->
+    <div class="no-results" *ngIf="chercheurs.length === 0">
+      <mat-icon>search_off</mat-icon>
+      <h3>Aucun résultat</h3>
+      <p>Aucun chercheur ne correspond à votre recherche.</p>
+    </div>
+  </div>
+
+  <!-- État initial -->
+  <div class="empty-state" *ngIf="!loading && !searched">
+    <mat-icon>travel_explore</mat-icon>
+    <p>Lancez une recherche pour afficher les chercheurs.</p>
+  </div>
+
+</div>

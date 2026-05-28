@@ -1,1 +1,78 @@
-<p>moderateur-dashboard works!</p>
+<!-- ============================================================
+     REMPLACE le contenu de :
+     src/app/features/moderateur/dashboard/moderateur-dashboard/moderateur-dashboard.component.html
+     ============================================================ -->
+
+<!-- Barre supérieure -->
+<header class="mod-topbar">
+  <div class="mod-brand">
+    <div class="brand-icon"><mat-icon>edit_note</mat-icon></div>
+    <div>
+      <h3>Espace Modérateur</h3>
+      <span class="role-badge">MODERATOR</span>
+    </div>
+  </div>
+  <button mat-button (click)="logout()">
+    <mat-icon>logout</mat-icon> Déconnexion
+  </button>
+</header>
+
+<div class="mod-dashboard">
+  <div class="page-header">
+    <h1><mat-icon>dashboard</mat-icon> Gestion du contenu</h1>
+    <p>Gérez le contenu de la page d'accueil, les actualités et les annonces.</p>
+  </div>
+
+  <div class="mod-cards">
+    <mat-card class="mod-card">
+      <mat-card-header>
+        <div mat-card-avatar class="card-avatar news"><mat-icon>newspaper</mat-icon></div>
+        <mat-card-title>Actualités</mat-card-title>
+        <mat-card-subtitle>Publier et gérer les actualités</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Rédigez et diffusez les dernières actualités de la plateforme.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary"
+                (click)="router.navigate(['/moderateur/actualites'])">
+          Gérer les actualités
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="mod-card">
+      <mat-card-header>
+        <div mat-card-avatar class="card-avatar ann"><mat-icon>campaign</mat-icon></div>
+        <mat-card-title>Annonces</mat-card-title>
+        <mat-card-subtitle>Créer et diffuser des annonces</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Diffusez des annonces importantes aux visiteurs et chercheurs.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent"
+                (click)="router.navigate(['/moderateur/annonces'])">
+          Gérer les annonces
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="mod-card">
+      <mat-card-header>
+        <div mat-card-avatar class="card-avatar proj"><mat-icon>featured_play_list</mat-icon></div>
+        <mat-card-title>Projets en avant</mat-card-title>
+        <mat-card-subtitle>Mettre en avant les projets récents</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Sélectionnez les projets à mettre en avant sur la page d'accueil.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button
+                (click)="router.navigate(['/moderateur/projets'])">
+          Configurer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

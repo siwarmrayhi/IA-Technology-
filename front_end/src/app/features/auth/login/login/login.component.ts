@@ -46,13 +46,14 @@ export class LoginComponent {
               localStorage.setItem('userRoles', JSON.stringify(roles));
               localStorage.setItem('currentUserId', currentUser.id?.toString() || '');
 
+
               // Redirection selon le rôle
               if (roles.includes('ADMIN')) {
                 this.router.navigate(['/admin/dashboard']);
               } else if (roles.includes('MODERATOR')) {
                 this.router.navigate(['/moderateur/dashboard']);
               } else {
-                this.router.navigate(['/espace-utilisateur/profil']);
+                this.router.navigate(['/']); // <-- Page d'accueil (Home) au lieu du profil
               }
             }
           },
