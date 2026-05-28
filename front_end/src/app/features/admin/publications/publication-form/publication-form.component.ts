@@ -33,7 +33,7 @@ export class PublicationFormComponent implements OnInit {
       description: [data?.description || ''],
       doi: [data?.doi || ''],
       fichier: [data?.fichier || ''],
-      datePublication: [data?.datePublication || null],
+      datePublication: [data?.datePublication || new Date(), Validators.required],
       chercheurs: [data?.chercheurs || [], Validators.required]
     });
   }

@@ -1,5 +1,5 @@
 <!-- ============================================================
-     REMPLACE tout le contenu de :
+     REMPLACE entièrement :
      src/app/features/public/recherche/recherche/recherche.component.html
      ============================================================ -->
 
@@ -7,44 +7,36 @@
 
 <div class="recherche-page">
 
-  <!-- En-tête -->
   <header class="recherche-header">
     <h1><mat-icon>search</mat-icon> Recherche</h1>
-    <p>Trouvez des chercheurs par nom, par domaine ou par mots-clés.</p>
+    <p>Trouvez des chercheurs et des publications par nom, par domaine ou par mots-clés.</p>
   </header>
 
-  <!-- Barre de recherche -->
   <mat-card class="search-box">
     <div class="search-types">
-      <button mat-stroked-button
-              [class.active]="searchType === 'nom'"
+      <button mat-stroked-button [class.active]="searchType === 'nom'"
               (click)="searchType = 'nom'; clearSearch()">
         <mat-icon>person</mat-icon> Par nom
       </button>
-      <button mat-stroked-button
-              [class.active]="searchType === 'domaine'"
+      <button mat-stroked-button [class.active]="searchType === 'domaine'"
               (click)="searchType = 'domaine'; clearSearch()">
         <mat-icon>category</mat-icon> Par domaine
       </button>
-      <button mat-stroked-button
-              [class.active]="searchType === 'mots-cles'"
+      <button mat-stroked-button [class.active]="searchType === 'mots-cles'"
               (click)="searchType = 'mots-cles'; clearSearch()">
         <mat-icon>label</mat-icon> Par mots-clés
       </button>
     </div>
 
     <div class="search-inputs">
-      <!-- Champ texte : nom ou mots-clés -->
       <mat-form-field appearance="outline" class="search-field"
                       *ngIf="searchType === 'nom' || searchType === 'mots-cles'">
         <mat-label>{{ searchType === 'nom' ? 'Nom du chercheur' : 'Mot-clé' }}</mat-label>
-        <input matInput [(ngModel)]="searchQuery"
-               (keyup.enter)="search()"
+        <input matInput [(ngModel)]="searchQuery" (keyup.enter)="search()"
                placeholder="Saisissez votre recherche..." />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
-      <!-- Sélection de domaine -->
       <mat-form-field appearance="outline" class="search-field"
                       *ngIf="searchType === 'domaine'">
         <mat-label>Domaine</mat-label>
@@ -70,40 +62,70 @@
   <!-- Résultats -->
   <div class="results" *ngIf="!loading && searched">
 
-    <p class="results-count" *ngIf="chercheurs.length > 0">
-      {{ chercheurs.length }} chercheur(s) trouvé(s)
-    </p>
+    <p class="results-count">{{ totalResultats }} résultat(s) trouvé(s)</p>
 
-    <div class="results-grid">
-      <mat-card class="chercheur-card" *ngFor="let c of chercheurs">
-        <mat-card-header>
-          <div mat-card-avatar class="chercheur-avatar">
-            <mat-icon>person</mat-icon>
-          </div>
-          <mat-card-title>{{ c.prenom }} {{ c.nom }}</mat-card-title>
-          <mat-card-subtitle *ngIf="c.affiliation">{{ c.affiliation }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p *ngIf="c.email"><mat-icon>email</mat-icon> {{ c.email }}</p>
-          <mat-chip-set *ngIf="c.domaine">
-            <mat-chip>{{ c.domaine.nom }}</mat-chip>
-          </mat-chip-set>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <!-- SECTION CHERCHEURS -->
+    <section *ngIf="chercheurs.length > 0" class="result-section">
+      <h2><mat-icon>groups</mat-icon> Chercheurs ({{ chercheurs.length }})</h2>
+      <div class="results-grid">
+        <mat-card class="chercheur-card" *ngFor="let c of chercheurs">
+          <mat-card-header>
+            <div mat-card-avatar class="chercheur-avatar"><mat-icon>person</mat-icon></div>
+            <mat-card-title>{{ c.prenom }} {{ c.nom }}</mat-card-title>
+            <mat-card-subtitle *ngIf="c.affiliation">{{ c.affiliation }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="c.email"><mat-icon>email</mat-icon> {{ c.email }}</p>
+            <mat-chip-set *ngIf="c.domaine"><mat-chip>{{ c.domaine.nom }}</mat-chip></mat-chip-set>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- SECTION PUBLICATIONS -->
+    <section *ngIf="publications.length > 0" class="result-section">
+      <h2><mat-icon>article</mat-icon> Publications ({{ publications.length }})</h2>
+      <div class="results-grid">
+        <mat-card class="publication-card" *ngFor="let p of publications">
+          <mat-card-header>
+            <div mat-card-avatar class="pub-avatar"><mat-icon>article</mat-icon></div>
+            <mat-card-title>{{ p.titre }}</mat-card-title>
+            <mat-card-subtitle *ngIf="p.datePublication">
+              {{ p.datePublication | date:'MMMM yyyy' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="p.description">
+              {{ p.description | slice:0:140 }}{{ p.description?.length > 140 ? '...' : '' }}
+            </p>
+            <mat-chip-set *ngIf="p.chercheurs?.length">
+              <mat-chip *ngFor="let c of p.chercheurs">{{ c.prenom }} {{ c.nom }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button color="primary" *ngIf="p.doi" [href]="p.doi" target="_blank">
+              <mat-icon>link</mat-icon> DOI
+            </a>
+            <button mat-button color="accent" *ngIf="p.fichier" (click)="downloadPub(p.fichier)">
+              <mat-icon>download</mat-icon> PDF
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </section>
 
     <!-- Aucun résultat -->
-    <div class="no-results" *ngIf="chercheurs.length === 0">
+    <div class="no-results" *ngIf="totalResultats === 0">
       <mat-icon>search_off</mat-icon>
       <h3>Aucun résultat</h3>
-      <p>Aucun chercheur ne correspond à votre recherche.</p>
+      <p>Aucun chercheur ni publication ne correspond à votre recherche.</p>
     </div>
   </div>
 
   <!-- État initial -->
   <div class="empty-state" *ngIf="!loading && !searched">
     <mat-icon>travel_explore</mat-icon>
-    <p>Lancez une recherche pour afficher les chercheurs.</p>
+    <p>Lancez une recherche pour afficher les chercheurs et publications.</p>
   </div>
 
 </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Publication } from '../models/publication.model';
 
@@ -39,5 +39,30 @@ export class PublicationService {
   downloadFile(filename: string): string {
     // URL de téléchargement du fichier depuis le backend
     return `${environment.apiUrl.replace('/api', '')}/uploads/${filename}`;
+
   }
+
+    recherchePublications(terme: string): Observable<Publication[]> {
+    const q = terme.trim().toLowerCase();
+    return this.getAll().pipe(
+      map((pubs : any) => pubs.filter((p:any) =>
+        (p.titre || '').toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        (p.chercheurs || []).some((c :any) =>
+          `${c.prenom || ''} ${c.nom || ''}`.toLowerCase().includes(q)
+        )
+      ))
+    );
+  }
+
+  // Recherche des publications appartenant à un domaine donné
+  // (via les chercheurs associés à ce domaine).
+  recherchePublicationsParDomaine(domaineId: number): Observable<Publication[]> {
+    return this.getAll().pipe(
+      map(pubs => pubs.filter(p =>
+        (p.chercheurs || []).some(c => c.domaine?.id === domaineId)
+      ))
+    );
+  }
+
 }
