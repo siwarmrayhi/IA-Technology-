@@ -1,0 +1,14 @@
+# Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+.env
+
+# Angular
+node_modules/
+dist/
+
+# Spring Boot
+target/
